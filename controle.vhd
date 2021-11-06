@@ -22,12 +22,12 @@ port(
 	escrevePC: out std_logic;
 	escrevePCCond: out std_logic;
 	escrevePCB: out std_logic;
-	origPC: out std_logic
+	origPC: out std_logic;
 	auipc: out std_logic);
 end control;
 
 architecture arch of control is
-type STATE_TYPE is (Fetch, Decode, Jump, IType, IWrite, RType, RWrite, Branch, LS, SW, LW, MWrite, LUI, AUIPC);
+type STATE_TYPE is (Fetch, Decode, Jump, IType, IWrite, RType, RWrite, Branch, LS, SW, LW, MWrite, LUI, AUI);
 signal state: STATE_TYPE := Fetch;
 begin
 	FSM: process(clock, op)
@@ -62,7 +62,7 @@ begin
 							state <= LUI;
 
 						when "0010111" =>
-							state <= AUIPC;
+							state <= AUI;
 
 						when others =>
 							state <= Fetch;
@@ -87,7 +87,7 @@ begin
 							state <= SW;
 						when others =>
 							state <= Fetch;
-					end case
+					end case;
 				when SW =>
 					state <= Fetch;
 				when LW =>
@@ -311,7 +311,7 @@ begin
 				origPC <= '0';
 				auipc <= '0';
 
-			when AUIPC =>
+			when AUI =>
 				escreveReg <= '0';
 				opALU <= "11";
 				origAULA <= '1';
