@@ -7,6 +7,7 @@ use IEEE.std_logic_1164.all;
 
 entity control is
 port(
+	clock: in std_logic;
 	op: in std_logic_vector(6 downto 0);
 
 	escreveReg: out std_logic;
@@ -21,150 +22,310 @@ port(
 	escrevePC: out std_logic;
 	escrevePCCond: out std_logic;
 	escrevePCB: out std_logic;
-	origPC: out std_logic);
+	origPC: out std_logic
+	auipc: out std_logic);
 end control;
 
 architecture arch of control is
+type STATE_TYPE is (Fetch, Decode, Jump, IType, IWrite, RType, RWrite, Branch, LS, SW, LW, MWrite, LUI, AUIPC);
+signal state: STATE_TYPE := Fetch;
 begin
-	process(op)
+	FSM: process(clock, op)
 	begin
-		case op is
-			when "0110011" =>	--Tipo R
-				escreveReg <= '1';
-				opALU <= "10";
-				origAULA <= '1';
-				origBULA <= "00";
+		if rising_edge(clock) then
+			case state is
+				when Fetch =>
+					state <= Decode;
+				when Decode =>
+					case op is
+						when "0110011" =>
+							state <= RType;
+						
+						when "0010011" =>
+							state <= IType;
+
+						when "1100011" =>
+							state <= Branch;
+
+						when "1101111" =>
+							state <= Jump;
+
+						when "1100111" =>
+							state <= Jump;
+
+						when "0000011" =>
+							state <= LS;
+						when "0100011" =>
+							state <= LS;
+
+						when "0110111" =>
+							state <= LUI;
+
+						when "0010111" =>
+							state <= AUIPC;
+
+						when others =>
+							state <= Fetch;
+					end case;
+				when Jump =>
+					state <= Fetch;
+				when IType =>
+					state <= IWrite;
+				when IWrite =>
+					state <= Fetch;
+				when RType =>
+					state <= RWrite;
+				when RWrite =>
+					state <= Fetch;
+				when Branch =>
+					state <= Fetch;
+				when LS =>
+					case op is
+						when "0000011" =>
+							state <= LW;
+						when "0100011" =>
+							state <= SW;
+						when others =>
+							state <= Fetch;
+					end case
+				when SW =>
+					state <= Fetch;
+				when LW =>
+					state <= MWrite;
+				when MWrite =>
+					state <= Fetch;
+				when others => 
+					state <= Fetch;
+			end case;
+		end if;
+	end FSM;
+
+	process(state)
+	begin
+		case state is
+			when Fetch =>	
+				escreveReg <= '0';
+				opALU <= "00";
+				origAULA <= '0';
+				origBULA <= "01";
 				leMem <= '1';
 				escreveMem <= '0';
 				mem2Reg <= "00"; 
-				IouD <= '0';
+				IouD <= '0'; 
 				escreveR <= '1';
 				escrevePC <= '1';
 				escrevePCCond <= '0';
 				escrevePCB <= '1';
 				origPC <= '0';
+				auipc <= '0';
 
-			when "0010011" =>	--Tipo I
+			when Decode =>
 				escreveReg <= '0';
 				opALU <= "00";
 				origAULA <= '0';
 				origBULA <= "11";
-				leMem <= '1';
+				leMem <= '0';
 				escreveMem <= '0';
 				mem2Reg <= "00";
 				IouD <= '0';
-				escreveR <= '1';
+				escreveR <= '0';
+				escrevePC <= '0';
+				escrevePCCond <= '0';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
+
+			when Jump =>
+				escreveReg <= '1';
+				opALU <= "00";
+				origAULA <= '0';
+				origBULA <= "00";
+				leMem <= '0';
+				escreveMem <= '0';
+				mem2Reg <= "01";
+				IouD <= '0';
+				escreveR <= '0';
 				escrevePC <= '1';
 				escrevePCCond <= '0';
-				escrevePCB <= '1';
-				origPC <= '0';
+				escrevePCB <= '0';
+				origPC <= '1';
+				auipc <= '0';
 				
-			when "1100011" =>	--Branch
+			when IType =>
+				escreveReg <= '0';
+				opALU <= "00";
+				origAULA <= '1';
+				origBULA <= "10";
+				leMem <= '0';
+				escreveMem <= '0';
+				mem2Reg <= "00";
+				IouD <= '0';
+				escreveR <= '0';
+				escrevePC <= '0';
+				escrevePCCond <= '0';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
+
+			when IWrite =>
+				escreveReg <= '1';
+				opALU <= "00";
+				origAULA <= '0';
+				origBULA <= "00";
+				leMem <= '0';
+				escreveMem <= '0';
+				mem2Reg <= "00";
+				IouD <= '0';
+				escreveR <= '0';
+				escrevePC <= '0';
+				escrevePCCond <= '0';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
+
+			when RType =>
+				escreveReg <= '0';
+				opALU <= "10";
+				origAULA <= '1';
+				origBULA <= "00";
+				leMem <= '0';
+				escreveMem <= '0';
+				mem2Reg <= "00";
+				IouD <= '0';
+				escreveR <= '0';
+				escrevePC <= '0';
+				escrevePCCond <= '0';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
+
+			when RWrite =>
+				escreveReg <= '1';
+				opALU <= "00";
+				origAULA <= '0';
+				origBULA <= "00";
+				leMem <= '0';
+				escreveMem <= '0';
+				mem2Reg <= "00";
+				IouD <= '0';
+				escreveR <= '0';
+				escrevePC <= '0';
+				escrevePCCond <= '0';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
+
+			when Branch =>
 				escreveReg <= '0';
 				opALU <= "01";
 				origAULA <= '1';
 				origBULA <= "00";
-				leMem <= '1';
+				leMem <= '0';
 				escreveMem <= '0';
 				mem2Reg <= "00";
 				IouD <= '0';
-				escreveR <= '1';
-				escrevePC <= '1';
+				escreveR <= '0';
+				escrevePC <= '0';
 				escrevePCCond <= '1';
-				escrevePCB <= '1';
+				escrevePCB <= '0';
 				origPC <= '1';
-				
-			when "0000011" =>	--LW
-				escreveReg <= '1';
-				opALU <= "00";
-				origAULA <= '1';
-				origBULA <= "10";
-				leMem <= '1';
-				escreveMem <= '0';
-				mem2Reg <= "10";
-				IouD <= '1';
-				escreveR <= '1';
-				escrevePC <= '1';
-				escrevePCCond <= '0';
-				escrevePCB <= '1';
-				origPC <= '0';
+				auipc <= '0';
 
-			when "0100011" =>	--SW
+			when LS =>
 				escreveReg <= '0';
 				opALU <= "00";
 				origAULA <= '1';
 				origBULA <= "10";
-				leMem <= '1';
+				leMem <= '0';
+				escreveMem <= '0';
+				mem2Reg <= "00";
+				IouD <= '0';
+				escreveR <= '0';
+				escrevePC <= '0';
+				escrevePCCond <= '0';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
+
+			when SW =>
+				escreveReg <= '0';
+				opALU <= "00";
+				origAULA <= '0';
+				origBULA <= "00";
+				leMem <= '0';
 				escreveMem <= '1';
 				mem2Reg <= "00";
 				IouD <= '1';
-				escreveR <= '1';
-				escrevePC <= '1';
-				escrevePCCond <= '0';
-				escrevePCB <= '1';
-				origPC <= '0';
-
-			when "0110111" =>	--LUI
-				-- ????
-				escreveReg <= '0';
-				opALU <= "00";
-				origAULA <= '0';
-				origBULA <= "00";
-				leMem <= '0';
-				escreveMem <= '0';
-				mem2Reg <= "00";
-				IouD <= '0';
 				escreveR <= '0';
 				escrevePC <= '0';
 				escrevePCCond <= '0';
 				escrevePCB <= '0';
 				origPC <= '0';
+				auipc <= '0';
 
-			when "0010111" =>	--AUIPC
-				-- ????
+			when LW =>
 				escreveReg <= '0';
 				opALU <= "00";
 				origAULA <= '0';
 				origBULA <= "00";
-				leMem <= '0';
+				leMem <= '1';
 				escreveMem <= '0';
 				mem2Reg <= "00";
-				IouD <= '0';
+				IouD <= '1';
 				escreveR <= '0';
 				escrevePC <= '0';
 				escrevePCCond <= '0';
 				escrevePCB <= '0';
 				origPC <= '0';
-
-			when "1101111" =>	--JAL
+				auipc <= '0';
+			
+			when MWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
-				origAULA <= '1';
-				origBULA <= "01";
-				leMem <= '1';
+				origAULA <= '0';
+				origBULA <= "00";
+				leMem <= '0';
 				escreveMem <= '0';
-				mem2Reg <= "01";
+				mem2Reg <= "10";
 				IouD <= '0';
-				escreveR <= '1';
-				escrevePC <= '1';
+				escreveR <= '0';
+				escrevePC <= '0';
 				escrevePCCond <= '0';
-				escrevePCB <= '1';
-				origPC <= '1';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
+			
+			when LUI =>
+				escreveReg <= '1';
+				opALU <= "11";
+				origAULA <= '1';
+				origBULA <= "10";
+				leMem <= '0';
+				escreveMem <= '0';
+				mem2Reg <= "00";
+				IouD <= '0';
+				escreveR <= '0';
+				escrevePC <= '0';
+				escrevePCCond <= '0';
+				escrevePCB <= '0';
+				origPC <= '0';
+				auipc <= '0';
 
-			when "1100111" =>	--JALR
+			when AUIPC =>
 				escreveReg <= '0';
-				opALU <= "00";
+				opALU <= "11";
 				origAULA <= '1';
-				origBULA <= "01";
-				leMem <= '1';
+				origBULA <= "10";
+				leMem <= '0';
 				escreveMem <= '0';
-				mem2Reg <= "01";
+				mem2Reg <= "00";
 				IouD <= '0';
-				escreveR <= '1';
+				escreveR <= '0';
 				escrevePC <= '1';
 				escrevePCCond <= '0';
-				escrevePCB <= '1';
+				escrevePCB <= '0';
 				origPC <= '1';
+				auipc <= '1';
 
 			when others =>
 				escreveReg <= '0';
@@ -180,7 +341,7 @@ begin
 				escrevePCCond <= '0';
 				escrevePCB <= '0';
 				origPC <= '0';
-
+				auipc <= '0';
 		end case;
 	end process;
 end arch;
