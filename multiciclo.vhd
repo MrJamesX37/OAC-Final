@@ -179,7 +179,7 @@ architecture multiciclo of RVMulticiclo is
             s_imm32, BULA);
 
         ula_ctrl: ula_controle PORT MAP(
-            clock, opALU, IR(14 downto 12), IR(25), auipc, opOut
+            clock, opALU, IR(14 downto 12), IR(30), auipc, opOut
         );
 
         ula: ulaRv PORT MAP(opOut, AULA, BULA, ULAout, cond);
