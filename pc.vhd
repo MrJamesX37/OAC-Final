@@ -8,6 +8,7 @@ use IEEE.std_logic_1164.all;
 entity pc is
 port(
 	addr_in: in std_logic_vector(31 downto 0);
+	wren: in std_logic;
 	clk: in std_logic;
 	addr_out: out std_logic_vector(31 downto 0);
 );
@@ -17,7 +18,7 @@ architecture arch of pc is
 begin
 	process(clk)
 	begin
-		if rising_edge(clk) then
+		if rising_edge(clk) and wren = '1' then
 			addr_out <= addr_in;
 		end if;
 	end process;
