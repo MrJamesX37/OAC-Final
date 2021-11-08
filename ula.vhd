@@ -16,6 +16,8 @@ entity ulaRV is
 end ulaRV;
 
 architecture arch of ulaRV is
+constant TRUE: std_logic_vector(31 downto 0) := x"00000001";
+constant FALSE: std_logic_vector(31 downto 0) := x"00000000";
 begin
 	process(A, B, opcode)
 	begin
@@ -46,43 +48,55 @@ begin
 
 			when "1000" =>
 				if(signed(A) < signed(B)) then
+					Z <= TRUE;
 					cond <= '1';
 				else
+					Z <= FALSE;
 					cond <= '0';
 				end if;
 
 			when "1001" =>
 				if(unsigned(A) < unsigned(B)) then
+					Z <= TRUE;
 					cond <= '1';
 				else
+					Z <= FALSE;
 					cond <= '0';
 				end if;
 
 			when "1010" =>
 				if(signed(A) >= signed(B)) then
+					Z <= TRUE;
 					cond <= '1';
 				else
+					Z <= FALSE;
 					cond <= '0';
 				end if;
 
 			when "1011" =>
 				if(unsigned(A) >= unsigned(B)) then
+					Z <= TRUE;
 					cond <= '1';
 				else
+					Z <= FALSE;
 					cond <= '0';
 				end if;
 
 			when "1100" =>
 				if(signed(A) = signed(B)) then
+					Z <= TRUE;
 					cond <= '1';
 				else
+					Z <= FALSE;
 					cond <= '0';
 				end if;
 
 			when "1101" =>
 				if(signed(A) /= signed(B)) then
+					Z <= TRUE;
 					cond <= '1';
 				else
+					Z <= FALSE;
 					cond <= '0';
 				end if;
 				
