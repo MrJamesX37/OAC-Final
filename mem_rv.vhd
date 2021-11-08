@@ -11,9 +11,9 @@ entity mem_rv is
 	port(
 		clock: in std_logic;
 		wren: in std_logic;
-		address: in std_logic_vector(11 downto 0);
-		data_in: in std_logic_vector(31 downto 0);
-		data_out: out std_logic_vector(31 downto 0));
+		address: in std_logic_vector;
+		data_in: in std_logic_vector;
+		data_out: out std_logic_vector);
 end mem_rv;
 
 architecture arch of mem_rv is
