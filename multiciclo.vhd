@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.std_logic_arith.all;
+use IEEE.numeric_std.all;
 ------------------------------------------------------
 entity RVMulticiclo is
     port(clock :in std_logic);
@@ -110,16 +110,38 @@ architecture multiciclo of RVMulticiclo is
     signal escrevePCB, origPC, auipc :std_logic;
 
     -- PC
-    signal addr_in, addr_out :std_logic_vector(31 downto 0);
+    signal pc_in, pc_out :std_logic_vector(31 downto 0);
 
-    -- MUX 1
+    -- MUX 01
     signal saidaULA, address :std_logic_vector(31 downto 0);
 
     -- Memoria
     signal data_in, data_out :std_logic_vector(31 downto 0);
+    signal addr_aux :std_logic_vector(31 downto 0);
 
     -- Registradores de instrucao e de dados
     signal IR, DR :std_logic_vector(31 downto 0);
+
+    -- MUX 02
+    signal write_data :std_logic_vector(31 downto 0);
+
+    -- XREGS
+    signal regA, regB :std_logic_vector(31 downto 0);
+
+    -- Gerador de imediato
+    signal imm32, s_imm32 :std_logic_vector(31 downto 0);
+
+    -- PCback
+    signal PCback :std_logic_vector(31 downto 0);
+
+    -- ULA controle
+    signal opOut :std_logic_vector(3 downto 0);
+
+    -- ULA
+    signal AULA, BULA :std_logic_vector(31 downto 0);
+    signal ULAout :std_logic_vector(31 downto 0);
+    signal opcode :std_logic_vector(3 downto 0);
+    signal cond :std_logic;
 
     begin
         ctrl: control PORT MAP(
@@ -128,18 +150,59 @@ architecture multiciclo of RVMulticiclo is
             mem2Reg, IouD, escreveR, escrevePC,
             escrevePCCond, escrevePCB, origPC, auipc
         );
-        pc_rv: pc PORT MAP (addr_in, clock, addr_out);
-        mux01: mux2 PORT MAP(IouD, addr_out, saidaULA, address);
-        mem: mem_rv PORT MAP(clock, escreveMem, address, data_in, data_out);
 
-        -- Escrita nos registradore de instrucao e de dados
-        process
+        pc_rv: pc PORT MAP (pc_in, clock, pc_out);
+
+        mux01: mux2 PORT MAP(IouD, pc_out, saidaULA, address);
+
+        mem: mem_rv PORT MAP(
+            clock, escreveMem, addr_aux(11 downto 0), data_in, data_out
+        );
+
+        mux02: mux4 PORT MAP(
+            mem2Reg, saidaULA, pc_in, DR, x"00000000", write_data
+        );
+        
+        regs: XREGS PORT MAP(
+            clock, escreveReg, '0', IR(19 downto 15), IR(24 downto 20),  
+            IR(11 downto 7), write_data, regA, regB
+        );
+
+        imm: genImm32 PORT MAP(IR, imm32);
+
+        mux03: mux2 PORT MAP(origAULA, PCback, regA, AULA);
+
+        mux04: mux4 PORT MAP(
+            origBULA, regB, x"00000004", imm32,
+            s_imm32, BULA);
+
+        ula_ctrl: ula_controle PORT MAP(
+            clock, opALU, IR(14 downto 12), IR(25), auipc, opOut
+        );
+
+        ula: ulaRv PORT MAP(opOut, AULA, BULA, ULAout, cond);
+
+        mux05: mux2 PORT MAP(origPC, ULAout, saidaULA, pc_in);
+
+        sync_proc: process(clock)
         begin
+            if rising_edge(clock) then 
+                saidaULA <= ULAout;
+            end if;
+        end process;
+
+        async_proc: process(address, data_out, pc_out)
+        begin
+            if EscrevePC = '1' then PCback <= pc_out;
+            end if;
+
+            s_imm32 <= std_logic_vector(shift_left(unsigned(imm32), 1));
+
+            addr_aux <= std_logic_vector(shift_right(unsigned(address), 2));
+            
             DR <= data_out;
             if EscreveR = '1' then IR <= data_out;
             end if;
         end process;
-
-
 
 end multiciclo; 
