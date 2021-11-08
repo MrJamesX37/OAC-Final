@@ -12,6 +12,7 @@ architecture multiciclo of RVMulticiclo is
     component pc is
         port(
             addr_in: in std_logic_vector(31 downto 0);
+            wren: in std_logic;
             clk: in std_logic;
             addr_out: out std_logic_vector(31 downto 0)
         );
@@ -111,6 +112,7 @@ architecture multiciclo of RVMulticiclo is
 
     -- PC
     signal pc_in, pc_out :std_logic_vector(31 downto 0);
+    signal pc_write :std_logic;
 
     -- MUX 01
     signal saidaULA, address :std_logic_vector(31 downto 0);
@@ -151,7 +153,7 @@ architecture multiciclo of RVMulticiclo is
             escrevePCCond, escrevePCB, origPC, auipc
         );
 
-        pc_rv: pc PORT MAP (pc_in, clock, pc_out);
+        pc_rv: pc PORT MAP (pc_in, pc_write, clock, pc_out);
 
         mux01: mux2 PORT MAP(IouD, pc_out, saidaULA, address);
 
@@ -193,7 +195,10 @@ architecture multiciclo of RVMulticiclo is
 
         async_proc: process(address, data_out, pc_out)
         begin
-            if EscrevePC = '1' then PCback <= pc_out;
+
+            pc_write <= (cond and escrevePCCond) or escrevePC;
+
+            if EscrevePCB = '1' then PCback <= pc_out;
             end if;
 
             s_imm32 <= std_logic_vector(shift_left(unsigned(imm32), 1));
