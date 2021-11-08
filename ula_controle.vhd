@@ -61,6 +61,7 @@ begin
 							opOut <= "1101"; -- BNE
 						when others =>
 							opOut <= "0000";
+					end case;
 				when "11" =>
 					if auipc = '0' then
 						opOut <= "1110"; -- LUI

@@ -32,4 +32,4 @@ begin
 				S <= x"00000000";
 		end case;
 	end process;
-end arch
+end arch;

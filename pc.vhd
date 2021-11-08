@@ -6,11 +6,11 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity pc is
-port(
-	addr_in: in std_logic_vector(31 downto 0);
-	clk: in std_logic;
-	addr_out: out std_logic_vector(31 downto 0);
-);
+	port(
+		addr_in: in std_logic_vector(31 downto 0);
+		clk: in std_logic;
+		addr_out: out std_logic_vector(31 downto 0)
+	);
 end pc;
 
 architecture arch of pc is

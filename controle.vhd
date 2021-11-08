@@ -98,7 +98,7 @@ begin
 					state <= Fetch;
 			end case;
 		end if;
-	end FSM;
+	end process FSM;
 
 	process(state)
 	begin

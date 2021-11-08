@@ -21,7 +21,7 @@ architecture arch of XREGS is
 	signal addr1 : integer := 0;
 	signal addr2 : integer := 0;
 	signal wAddr : integer := 0;
-	signal breg : mem_type := (x"00000000", others => (others => '0'));
+	signal breg : mem_type := (others => (others => '0'));
 
 	begin
 		addr1 <= to_integer(unsigned(rs1));
@@ -34,7 +34,7 @@ architecture arch of XREGS is
 		process(clk, wren, rst, rd, wAddr)
 		begin
 			if rst = '1' then
-				breg <= (x"00000000", others => (others => '0'));
+				breg <= (others => (others => '0'));
 			elsif rising_edge(clk) and (wren = '1') and (wAddr /= 0) then
 				breg(wAddr) <= data;
 			end if;
