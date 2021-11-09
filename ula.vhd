@@ -104,7 +104,7 @@ begin
 				Z <= A(19 downto 0) & x"000";
 
 			when "1111" =>
-				Z <= std_logic_vector(signed(A(19 downto 0) & x"000") + signed(B));
+				Z <= std_logic_vector(signed(B(19 downto 0) & x"000") + signed(A));
 
 			when others =>
 				Z <= (others => '0');
