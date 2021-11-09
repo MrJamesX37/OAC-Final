@@ -94,6 +94,10 @@ begin
 					state <= MWrite;
 				when MWrite =>
 					state <= Fetch;
+				when LUI =>
+					state <= RWrite;
+				when AUI =>
+					state <= RWrite;
 				when others => 
 					state <= Fetch;
 			end case;
@@ -321,7 +325,7 @@ begin
 				mem2Reg <= "00";
 				IouD <= '0';
 				escreveR <= '0';
-				escrevePC <= '1';
+				escrevePC <= '0';
 				escrevePCCond <= '0';
 				escrevePCB <= '0';
 				origPC <= '1';
