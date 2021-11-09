@@ -99,7 +99,13 @@ begin
 					Z <= FALSE;
 					cond <= '0';
 				end if;
-				
+
+			when "1110" =>
+				Z <= B(19 downto 0) & x"000";
+
+			when "1111" =>
+				Z <= std_logic_vector(signed(B(19 downto 0) & x"000") + signed(A));
+
 			when others =>
 				Z <= (others => '0');
 		end case;
