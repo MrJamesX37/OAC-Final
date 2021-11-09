@@ -94,6 +94,10 @@ begin
 					state <= MWrite;
 				when MWrite =>
 					state <= Fetch;
+				when LUI =>
+					state <= RWrite;
+				when AUI =>
+					state <= RWrite;
 				when others => 
 					state <= Fetch;
 			end case;
