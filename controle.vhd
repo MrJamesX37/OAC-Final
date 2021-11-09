@@ -23,7 +23,8 @@ port(
 	escrevePCCond: out std_logic;
 	escrevePCB: out std_logic;
 	origPC: out std_logic;
-	auipc: out std_logic);
+	auipc: out std_logic
+	funct_enable: out std_logic);
 end control;
 
 architecture arch of control is
@@ -122,6 +123,7 @@ begin
 				escrevePCB <= '1';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '0';
 
 			when Decode =>
 				escreveReg <= '0';
@@ -138,6 +140,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '0';
 
 			when Jump =>
 				escreveReg <= '1';
@@ -154,7 +157,8 @@ begin
 				escrevePCB <= '0';
 				origPC <= '1';
 				auipc <= '0';
-				
+				funct_enable <= '1';
+
 			when IType =>
 				escreveReg <= '0';
 				opALU <= "00";
@@ -170,12 +174,13 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '1';
 
 			when IWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
 				origAULA <= '0';
-				origBULA <= "00";
+				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
 				mem2Reg <= "00";
@@ -186,6 +191,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '0';
 
 			when RType =>
 				escreveReg <= '0';
@@ -202,12 +208,13 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '1';
 
 			when RWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
 				origAULA <= '0';
-				origBULA <= "00";
+				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
 				mem2Reg <= "00";
@@ -218,6 +225,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '0';
 
 			when Branch =>
 				escreveReg <= '0';
@@ -234,6 +242,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '1';
 				auipc <= '0';
+				funct_enable <= '1';
 
 			when LS =>
 				escreveReg <= '0';
@@ -250,12 +259,13 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '0';
 
 			when SW =>
 				escreveReg <= '0';
 				opALU <= "00";
 				origAULA <= '0';
-				origBULA <= "00";
+				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '1';
 				mem2Reg <= "00";
@@ -266,6 +276,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '1';
 
 			when LW =>
 				escreveReg <= '0';
@@ -282,12 +293,13 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
-			
+				funct_enable <= '1';
+
 			when MWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
 				origAULA <= '0';
-				origBULA <= "00";
+				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
 				mem2Reg <= "10";
@@ -298,7 +310,8 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
-			
+				funct_enable <= '0';
+
 			when LUI =>
 				escreveReg <= '1';
 				opALU <= "11";
@@ -314,6 +327,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '1';
 
 			when AUI =>
 				escreveReg <= '0';
@@ -330,6 +344,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '1';
 				auipc <= '1';
+				funct_enable <= '1';
 
 			when others =>
 				escreveReg <= '0';
@@ -346,6 +361,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
+				funct_enable <= '0';
 		end case;
 	end process;
 end arch;
