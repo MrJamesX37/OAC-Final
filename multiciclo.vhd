@@ -194,7 +194,10 @@ architecture multiciclo of RVMulticiclo is
             end if;
         end process;
 
-        async_proc: process(address, data_out, pc_out)
+        async_proc: process(
+            address, data_out, pc_out, cond, escrevePCCond,
+            escrevePC,EscrevePCB, imm32, EscreveR
+        )
         begin
 
             pc_write <= (cond and escrevePCCond) or escrevePC;
