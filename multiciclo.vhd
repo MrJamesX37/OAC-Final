@@ -111,14 +111,15 @@ architecture multiciclo of RVMulticiclo is
     signal escrevePCB, origPC, auipc :std_logic;
 
     -- PC
-    signal pc_in, pc_out :std_logic_vector(31 downto 0);
+    signal pc_in :std_logic_vector(31 downto 0);
+    signal pc_out :std_logic_vector(31 downto 0);
     signal pc_write :std_logic;
 
     -- MUX 01
     signal saidaULA, address :std_logic_vector(31 downto 0);
 
     -- Memoria
-    signal data_in, data_out :std_logic_vector(31 downto 0);
+    signal data_out :std_logic_vector(31 downto 0);
     signal addr_aux :std_logic_vector(31 downto 0);
 
     -- Registradores de instrucao e de dados
@@ -142,7 +143,7 @@ architecture multiciclo of RVMulticiclo is
     -- ULA
     signal AULA, BULA :std_logic_vector(31 downto 0);
     signal ULAout :std_logic_vector(31 downto 0);
-    signal opcode :std_logic_vector(3 downto 0);
+    -- signal opcode :std_logic_vector(3 downto 0);     
     signal cond :std_logic;
 
     begin
@@ -158,7 +159,7 @@ architecture multiciclo of RVMulticiclo is
         mux01: mux2 PORT MAP(IouD, pc_out, saidaULA, address);
 
         mem: mem_rv PORT MAP(
-            clock, escreveMem, addr_aux(11 downto 0), data_in, data_out
+            clock, escreveMem, addr_aux(11 downto 0), regB, data_out
         );
 
         mux02: mux4 PORT MAP(

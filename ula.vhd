@@ -101,7 +101,7 @@ begin
 				end if;
 				
 			when others =>
-				Z <= (others => 'Z');
+				Z <= (others => '0');
 		end case;
 	end process;
 end arch;

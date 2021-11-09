@@ -15,11 +15,15 @@ port(
 end pc;
 
 architecture arch of pc is
+	signal current_state :std_logic_vector(31 downto 0) := (others => '0');
 begin
 	process(clk)
 	begin
 		if rising_edge(clk) and wren = '1' then
 			addr_out <= addr_in;
+			current_state <= addr_in;
+		else
+			addr_out <= current_state;
 		end if;
 	end process;
 end arch;
