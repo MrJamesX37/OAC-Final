@@ -76,5 +76,6 @@ begin
 			else
 				opOut <= "0000";
 			end if;
+		end if;
 	end process;
 end arch;

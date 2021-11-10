@@ -87,7 +87,8 @@ architecture multiciclo of RVMulticiclo is
             escrevePCCond: out std_logic;
             escrevePCB: out std_logic;
             origPC: out std_logic;
-            auipc: out std_logic);
+            auipc: out std_logic;
+            funct_enable: out std_logic);
     end component;
 
     component ula_controle is
@@ -97,6 +98,7 @@ architecture multiciclo of RVMulticiclo is
             funct3: in std_logic_vector(2 downto 0);
             funct7: in std_logic;
             auipc: in std_logic;
+            funct_enable: in std_logic;
             opOut: out std_logic_vector(3 downto 0));
     end component;
     

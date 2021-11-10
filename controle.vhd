@@ -23,7 +23,7 @@ port(
 	escrevePCCond: out std_logic;
 	escrevePCB: out std_logic;
 	origPC: out std_logic;
-	auipc: out std_logic
+	auipc: out std_logic;
 	funct_enable: out std_logic);
 end control;
 
