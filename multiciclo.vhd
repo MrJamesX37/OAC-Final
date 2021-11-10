@@ -108,7 +108,7 @@ architecture multiciclo of RVMulticiclo is
     signal escreveReg, escreveMem, leMem :std_logic;
     signal origAULA, IouD, escreveR  :std_logic;
     signal escrevePC, escrevePCCond  :std_logic;
-    signal escrevePCB, origPC, auipc :std_logic;
+    signal escrevePCB, origPC, auipc, funct_enable :std_logic;
 
     -- PC
     signal pc_in :std_logic_vector(31 downto 0);
@@ -151,7 +151,7 @@ architecture multiciclo of RVMulticiclo is
             clock, IR(6 downto 0), escreveREG, opALU,
             origAULA, origBULA, leMem, escreveMem,
             mem2Reg, IouD, escreveR, escrevePC,
-            escrevePCCond, escrevePCB, origPC, auipc
+            escrevePCCond, escrevePCB, origPC, auipc, funct_enable
         );
 
         pc_rv: pc PORT MAP (pc_in, pc_write, clock, pc_out);
@@ -180,7 +180,7 @@ architecture multiciclo of RVMulticiclo is
             s_imm32, BULA);
 
         ula_ctrl: ula_controle PORT MAP(
-            clock, opALU, IR(14 downto 12), IR(30), auipc, opOut
+            clock, opALU, IR(14 downto 12), IR(30), auipc, funct_enable, opOut
         );
 
         ula: ulaRv PORT MAP(opOut, AULA, BULA, ULAout, cond);
