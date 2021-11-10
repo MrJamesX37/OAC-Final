@@ -269,12 +269,12 @@ begin
 				leMem <= '0';
 				escreveMem <= '1';
 				mem2Reg <= "00";
-				IouD <= '1';
+				IouD <= '0';
 				escreveR <= '0';
 				escrevePC <= '0';
 				escrevePCCond <= '0';
 				escrevePCB <= '0';
-				origPC <= '0';
+				origPC <= '1';
 				auipc <= '0';
 				funct_enable <= '1';
 
