@@ -161,7 +161,7 @@ begin
 
 			when IType =>
 				escreveReg <= '0';
-				opALU <= "00";
+				opALU <= "01";
 				origAULA <= '1';
 				origBULA <= "10";
 				leMem <= '0';
@@ -195,7 +195,7 @@ begin
 
 			when RType =>
 				escreveReg <= '0';
-				opALU <= "10";
+				opALU <= "00";
 				origAULA <= '1';
 				origBULA <= "00";
 				leMem <= '0';
@@ -229,7 +229,7 @@ begin
 
 			when Branch =>
 				escreveReg <= '0';
-				opALU <= "01";
+				opALU <= "10";
 				origAULA <= '1';
 				origBULA <= "00";
 				leMem <= '0';
