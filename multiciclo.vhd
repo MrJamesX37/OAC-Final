@@ -131,13 +131,19 @@ architecture multiciclo of RVMulticiclo is
     signal write_data :std_logic_vector(31 downto 0);
 
     -- XREGS
-    signal regA, regB :std_logic_vector(31 downto 0);
+    signal saidaA, saidaB :std_logic_vector(31 downto 0);
 
     -- Gerador de imediato
     signal imm32, s_imm32 :std_logic_vector(31 downto 0);
 
     -- PCback
     signal PCback :std_logic_vector(31 downto 0);
+
+    -- MUX 03
+    signal regA :std_logic_vector(31 downto 0);
+
+    -- MUX 04
+    signal regB :std_logic_vector(31 downto 0);
 
     -- ULA controle
     signal opOut :std_logic_vector(3 downto 0);
@@ -170,7 +176,7 @@ architecture multiciclo of RVMulticiclo is
         
         regs: XREGS PORT MAP(
             clock, escreveReg, '0', IR(19 downto 15), IR(24 downto 20),  
-            IR(11 downto 7), write_data, regA, regB
+            IR(11 downto 7), write_data, saidaA, saidaB
         );
 
         imm: genImm32 PORT MAP(IR, imm32);
@@ -193,6 +199,11 @@ architecture multiciclo of RVMulticiclo is
         begin
             if rising_edge(clock) then 
                 saidaULA <= ULAout;
+                if EscrevePCB = '1' then PCback <= pc_out;
+                end if;
+                regA <= saidaA;
+                regB <= saidaB;
+                DR <= data_out;
             end if;
         end process;
 
@@ -204,14 +215,10 @@ architecture multiciclo of RVMulticiclo is
 
             pc_write <= (cond and escrevePCCond) or escrevePC;
 
-            if EscrevePCB = '1' then PCback <= pc_out;
-            end if;
-
             s_imm32 <= std_logic_vector(shift_left(unsigned(imm32), 1));
 
             addr_aux <= std_logic_vector(shift_right(unsigned(address), 2));
             
-            DR <= data_out;
             if EscreveR = '1' then IR <= data_out;
             end if;
         end process;

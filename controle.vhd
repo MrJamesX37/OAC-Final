@@ -332,7 +332,7 @@ begin
 				funct_enable <= '1';
 
 			when AUI =>
-				escreveReg <= '0';
+				escreveReg <= '1';
 				opALU <= "11";
 				origAULA <= '1';
 				origBULA <= "10";
