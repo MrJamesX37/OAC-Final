@@ -140,7 +140,9 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
-				funct_enable <= '0';
+				if(op = "0110011") then funct_enable <= '1';
+				else funct_enable <= '0';
+				end if;
 
 			when Jump =>
 				escreveReg <= '1';
@@ -269,14 +271,14 @@ begin
 				leMem <= '0';
 				escreveMem <= '1';
 				mem2Reg <= "00";
-				IouD <= '0';
+				IouD <= '1';
 				escreveR <= '0';
 				escrevePC <= '0';
 				escrevePCCond <= '0';
 				escrevePCB <= '0';
 				origPC <= '1';
 				auipc <= '0';
-				funct_enable <= '1';
+				funct_enable <= '0';
 
 			when LW =>
 				escreveReg <= '0';
@@ -293,7 +295,7 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
-				funct_enable <= '1';
+				funct_enable <= '0';
 
 			when MWrite =>
 				escreveReg <= '1';
