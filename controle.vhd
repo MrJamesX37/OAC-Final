@@ -111,7 +111,7 @@ begin
 			when Fetch =>	
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "10";
 				origBULA <= "01";
 				leMem <= '1';
 				escreveMem <= '0';
@@ -128,7 +128,7 @@ begin
 			when Decode =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "11";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -147,7 +147,7 @@ begin
 			when Jump =>
 				escreveReg <= '1';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "00";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -164,7 +164,7 @@ begin
 			when IType =>
 				escreveReg <= '0';
 				opALU <= "01";
-				origAULA <= '1';
+				origAULA <= "01";
 				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -181,7 +181,7 @@ begin
 			when IWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -198,7 +198,7 @@ begin
 			when RType =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= '1';
+				origAULA <= "01";
 				origBULA <= "00";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -215,7 +215,7 @@ begin
 			when RWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -232,7 +232,7 @@ begin
 			when Branch =>
 				escreveReg <= '0';
 				opALU <= "10";
-				origAULA <= '1';
+				origAULA <= "01";
 				origBULA <= "00";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -249,7 +249,7 @@ begin
 			when LS =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= '1';
+				origAULA <= "01";
 				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -266,7 +266,7 @@ begin
 			when SW =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '1';
@@ -283,7 +283,7 @@ begin
 			when LW =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "00";
 				leMem <= '1';
 				escreveMem <= '0';
@@ -300,7 +300,7 @@ begin
 			when MWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -317,7 +317,7 @@ begin
 			when LUI =>
 				escreveReg <= '1';
 				opALU <= "11";
-				origAULA <= '1';
+				origAULA <= "11";
 				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -332,9 +332,9 @@ begin
 				funct_enable <= '1';
 
 			when AUI =>
-				escreveReg <= '1';
+				escreveReg <= '0';
 				opALU <= "11";
-				origAULA <= '1';
+				origAULA <= "01";
 				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -351,7 +351,7 @@ begin
 			when others =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= '0';
+				origAULA <= "00";
 				origBULA <= "00";
 				leMem <= '0';
 				escreveMem <= '0';

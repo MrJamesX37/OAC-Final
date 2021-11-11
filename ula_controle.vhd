@@ -66,9 +66,9 @@ begin
 						end case;
 					when "11" =>
 						if auipc = '0' then
-							opOut <= "1110"; -- LUI
+							opOut <= "0000"; -- LUI
 						else
-							opOut <= "1111"; -- AUIPC
+							opOut <= "0000"; -- AUIPC
 						end if;
 					when others =>
 						opOut <= "0000";
