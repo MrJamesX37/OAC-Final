@@ -12,7 +12,7 @@ port(
 
 	escreveReg: out std_logic;
 	opALU: out std_logic_vector(1 downto 0);
-	origAULA: out std_logic;
+	origAULA: out std_logic_vector(1 downto 0);
 	origBULA: out std_logic_vector(1 downto 0);
 	leMem: out std_logic;
 	escreveMem: out std_logic;
@@ -334,7 +334,7 @@ begin
 			when AUI =>
 				escreveReg <= '0';
 				opALU <= "11";
-				origAULA <= "01";
+				origAULA <= "00";
 				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';

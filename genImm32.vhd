@@ -53,6 +53,7 @@ begin
 			when "0100011" => imm32 <= S_Type;
 			when "1100011" => imm32 <= SB_Type;
 			when "0110111" => imm32 <= U_Type;
+			when "0010111" => imm32 <= U_Type;
 			when "1101111" => imm32 <= UJ_Type;
 			when others => imm32 <= R_Type;
 		end case;
