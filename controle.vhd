@@ -281,7 +281,7 @@ begin
 			when LW =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= "11";
+				origAULA <= "00";
 				origBULA <= "00";
 				leMem <= '1';
 				escreveMem <= '0';
@@ -313,7 +313,7 @@ begin
 				funct_enable <= '0';
 
 			when LUI =>
-				escreveReg <= '1';
+				escreveReg <= '0';
 				opALU <= "11";
 				origAULA <= "11";
 				origBULA <= "10";
