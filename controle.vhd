@@ -140,15 +140,13 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
-				if(op = "0110011") then funct_enable <= '1';
-				else funct_enable <= '0';
-				end if;
+				funct_enable <= '0';
 
 			when Jump =>
 				escreveReg <= '1';
 				opALU <= "00";
 				origAULA <= "00";
-				origBULA <= "00";
+				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';
 				mem2Reg <= "01";
@@ -181,7 +179,7 @@ begin
 			when IWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
-				origAULA <= "00";
+				origAULA <= "11";
 				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -215,7 +213,7 @@ begin
 			when RWrite =>
 				escreveReg <= '1';
 				opALU <= "00";
-				origAULA <= "00";
+				origAULA <= "11";
 				origBULA <= "01";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -283,7 +281,7 @@ begin
 			when LW =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= "00";
+				origAULA <= "11";
 				origBULA <= "00";
 				leMem <= '1';
 				escreveMem <= '0';
@@ -334,7 +332,7 @@ begin
 			when AUI =>
 				escreveReg <= '0';
 				opALU <= "11";
-				origAULA <= "00";
+				origAULA <= "10"; -- 00
 				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';
@@ -346,12 +344,12 @@ begin
 				escrevePCB <= '0';
 				origPC <= '1';
 				auipc <= '1';
-				funct_enable <= '1';
+				funct_enable <= '0';
 
 			when others =>
 				escreveReg <= '0';
 				opALU <= "00";
-				origAULA <= "00";
+				origAULA <= "11";
 				origBULA <= "00";
 				leMem <= '0';
 				escreveMem <= '0';
