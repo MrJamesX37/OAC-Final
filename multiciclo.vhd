@@ -171,7 +171,7 @@ architecture multiciclo of RVMulticiclo is
         );
 
         mux02: mux4 PORT MAP(
-            mem2Reg, saidaULA, pc_in, DR, x"00000000", write_data
+            mem2Reg, saidaULA, pc_out, DR, x"00000000", write_data
         );
         
         regs: XREGS PORT MAP(

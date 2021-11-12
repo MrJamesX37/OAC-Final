@@ -157,7 +157,7 @@ begin
 				escrevePC <= '1';
 				escrevePCCond <= '0';
 				escrevePCB <= '0';
-				origPC <= '1';
+				origPC <= '0';
 				auipc <= '0';
 				funct_enable <= '1';
 
