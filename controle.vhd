@@ -332,7 +332,7 @@ begin
 			when AUI =>
 				escreveReg <= '0';
 				opALU <= "11";
-				origAULA <= "01";
+				origAULA <= "10"; -- 00
 				origBULA <= "10";
 				leMem <= '0';
 				escreveMem <= '0';
