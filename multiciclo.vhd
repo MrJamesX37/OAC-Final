@@ -203,7 +203,6 @@ architecture multiciclo of RVMulticiclo is
                 end if;
                 regA <= saidaA;
                 regB <= saidaB;
-                DR <= data_out;
             end if;
         end process;
 
@@ -212,6 +211,7 @@ architecture multiciclo of RVMulticiclo is
             escrevePC, imm32, EscreveR
         )
         begin
+            DR <= data_out;
 
             pc_write <= (cond and escrevePCCond) or escrevePC;
 

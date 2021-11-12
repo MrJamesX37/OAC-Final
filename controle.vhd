@@ -140,7 +140,9 @@ begin
 				escrevePCB <= '0';
 				origPC <= '0';
 				auipc <= '0';
-				funct_enable <= '0';
+				if(op = "0110011") then funct_enable <= '1';
+				else funct_enable <= '0';
+				end if;
 
 			when Jump =>
 				escreveReg <= '1';
